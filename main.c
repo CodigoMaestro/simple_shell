@@ -30,6 +30,14 @@ int main(int argc, char **argv, char **env)
 			perror("getline error");
 			return (-1);
 		}
+		
+		if (line[0] == '#')
+		{
+			line = NULL;
+			n = 0;
+			continue;
+		}
+
 		/* Remove the newline character from the input*/
 		if (line[read - 1] == '\n')
 			line[read - 1] = '\0';
@@ -37,15 +45,15 @@ int main(int argc, char **argv, char **env)
 		command = line;
 		arguments[0] = command;
 		arguments[1] = NULL;
-		if (strcmp(command, "exit") == 0)
+		if (_strcmp(command, "exit") == 0)
 		{
 			free(line);
 			exit(0);
 		}
-		if (strcmp(command, "env") == 0)
+		if (_strcmp(command, "env") == 0)
 		{
 			shell_env(env);
-			return (0);
+			continue;
 		}
 		execute_command(command, arguments, env);
 	}
