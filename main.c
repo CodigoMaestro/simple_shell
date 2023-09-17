@@ -14,14 +14,18 @@ int main(int argc, char **argv, char **env)
 	char *line = NULL;
 	size_t n = 0;
 	ssize_t read;
-	(void)argc;
-	(void)env;
-	(void)argv;
+
+	if (argc > 1)
+	{
+		execute_command(argv[1], &argv[1], env);
+		return (0);
+	}
 
 	while (1)
 	{
 		char *arguments[1024];
 		char *command;
+		int i;
 
 		_printf("($) ");
 		read = getline(&line, &n, stdin);
@@ -38,13 +42,17 @@ int main(int argc, char **argv, char **env)
 			continue;
 		}
 
-		/* Remove the newline character from the input*/
 		if (line[read - 1] == '\n')
 			line[read - 1] = '\0';
-		/* Split the input into command and arguments */
-		command = line;
+
+		command = strtok(line, " ");
 		arguments[0] = command;
-		arguments[1] = NULL;
+
+		i = 1;
+		
+		while ((arguments[i] = strtok(NULL, " ")) != NULL)
+			i++;
+
 		if (_strcmp(command, "exit") == 0)
 		{
 			free(line);
@@ -56,5 +64,9 @@ int main(int argc, char **argv, char **env)
 			continue;
 		}
 		execute_command(command, arguments, env);
+
+		free(line);
+		line = NULL;
+		n = 0;
 	}
 }

@@ -21,6 +21,8 @@ int decimal_to_HEX(unsigned int num, int *count);
 int shell_env(char **env);
 void execute_command(char *command, char **arguments, char **env);
 int _strcmp(char *s1, char *s2);
+char *_strcat(char *dest, char *src);
+char *_getenv(const char *name, char **env);
 
 /**
  * struct spec - Struct for format specifiers and their respective functions
