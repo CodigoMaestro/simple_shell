@@ -45,8 +45,10 @@ int execute_shell(char **env)
 
 		if (_strcmp(command, "exit") == 0)
 		{
-			free(line);
-			exit(0);
+			if (arguments[1] != NULL)
+				exit(_atoi(arguments[1]));
+			else
+				exit(0);
 		}
 		if (_strcmp(command, "env") == 0)
 		{

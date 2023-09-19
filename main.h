@@ -26,6 +26,7 @@ char *_strpbrk(char *str, char *find);
 char *_strtok(char *str, char *delim);
 int execute_shell(char **env);
 char *search_command_path(char *command);
+int _atoi(char *s);
 
 /**
  * struct spec - Struct for format specifiers and their respective functions
