@@ -22,7 +22,10 @@ int shell_env(char **env);
 void execute_command(char *command, char **arguments, char **env);
 int _strcmp(char *s1, char *s2);
 char *_strcat(char *dest, char *src);
-char *_getenv(const char *name, char **env);
+char *_strpbrk(char *str, char *find);
+char *_strtok(char *str, char *delim);
+int execute_shell(char **env);
+char *search_command_path(char *command);
 
 /**
  * struct spec - Struct for format specifiers and their respective functions
