@@ -53,6 +53,11 @@ int execute_shell(char **env)
 			shell_env(env);
 			continue;
 		}
+		if (_strcmp(command, "echo") == 0 && _strcmp(arguments[1], "$$") == 0)
+		{
+			_printf("%d\n", getppid());
+			continue;
+		}
 		execute_command(command, arguments, env);
 
 		free(line);
