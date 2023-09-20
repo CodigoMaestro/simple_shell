@@ -19,7 +19,7 @@ int int_to_string(int num, char *buffer, int bufferSize);
 int decimal_to_binary(unsigned int num, int *count);
 int decimal_to_HEX(unsigned int num, int *count);
 int shell_env(char **env);
-void execute_command(char *command, char **arguments, char **env);
+int execute_command(char *command, char **arguments, char **env);
 int _strcmp(char *s1, char *s2);
 char *_strcat(char *dest, char *src);
 char *_strpbrk(char *str, char *find);

@@ -15,9 +15,10 @@ int execute_shell(char **env)
 
 	while (1)
 	{
-		char *arguments[1024];
-		char *command;
-		int i;
+		char *arguments[1024], *command;
+		int i, last_exit_status;
+
+		last_exit_status  = 0;
 
 		_printf("($) ");
 		read = getline(&line, &n, stdin);
@@ -60,7 +61,26 @@ int execute_shell(char **env)
 			_printf("%d\n", getppid());
 			continue;
 		}
-		execute_command(command, arguments, env);
+		if (_strcmp(command, "echo") == 0 && _strcmp(arguments[1], "$?") == 0)
+		{
+			_printf("%d\n", last_exit_status);
+			continue;
+		}
+		if (_strcmp(command, "cd") == 0)
+		{
+			if (arguments[1] == NULL)
+			{
+				char *home_dir;
+
+				home_dir = getenv("HOME");
+				chdir(home_dir);
+			}
+			else
+				chdir(arguments[1]);
+
+			continue;
+		}
+		last_exit_status = execute_command(command, arguments, env);
 
 		free(line);
 		line = NULL;

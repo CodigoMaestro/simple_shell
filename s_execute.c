@@ -65,7 +65,7 @@ void execute_parent_process(pid_t pid)
  *
  * Return: Nothing
  **/
-void execute_command(char *command, char **arguments, char **env)
+int execute_command(char *command, char **arguments, char **env)
 {
 	pid_t pid;
 	char *command_path;
@@ -81,7 +81,7 @@ void execute_command(char *command, char **arguments, char **env)
 	if (command_path == NULL)
 	{
 		_printf("%s: command not found\n", command);
-		return;
+		return (1);
 	}
 
 	pid = fork();
@@ -96,4 +96,5 @@ void execute_command(char *command, char **arguments, char **env)
 	}
 
 	free(command_path);
+	return (1);
 }
