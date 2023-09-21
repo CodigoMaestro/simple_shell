@@ -50,11 +50,16 @@ void execute_child_process(char *command_path, char **arguments, char **env)
  *
  * Return: Nothing
  */
-void execute_parent_process(pid_t pid)
+
+int execute_parent_process(pid_t pid)
 {
 	int status;
 
 	waitpid(pid, &status, 0);
+
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	return (-1);
 }
 
 /**
@@ -98,3 +103,34 @@ int execute_command(char *command, char **arguments, char **env)
 	free(command_path);
 	return (1);
 }
+
+/**
+ * tokenize_line - tokenize a line of input into arguments
+ * @line: the line of input to tokenize
+ *
+ * Return: a null-terminated array of arguments, or NULL if an error occurs
+ */
+char **tokenize_line(char *line)
+{
+	char **arguments;
+	char *token;
+	int i;
+
+	i = 0;
+	arguments = malloc(MAX_SIZE * sizeof(char *));
+	if (arguments == NULL)
+	{
+		perror("malloc error");
+		return (NULL);
+	}
+	token = strtok(line, " ");
+	while (token != NULL && i < MAX_SIZE)
+	{
+		arguments[i] = token;
+		token = strtok(NULL, " ");
+		i++;
+	}
+	arguments[i] = NULL;
+	return (arguments);
+}
+

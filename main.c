@@ -9,13 +9,13 @@
  * Return: Always 0.
  */
 
-int main(int argc __attribute__((unused)), char **argv, char **env)
+int main(int argc, char **argv, char **env)
 {
-	if (argv[1] != NULL )
+	(void)argc;
+	if (argv[1] != NULL)
 	{
 		execute_command(argv[1], &argv[1], env);
 		return (0);
 	}
-
 	return (execute_shell(env));
 }

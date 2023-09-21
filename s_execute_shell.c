@@ -6,21 +6,17 @@
  *
  * Return: Always 0.
  */
-
 int execute_shell(char **env)
 {
 	char *line = NULL;
 	size_t n = 0;
 	ssize_t read;
+	char **arguments;
 
 	while (1)
 	{
-		char *arguments[1024], *command;
-		int i, last_exit_status;
-
-		last_exit_status  = 0;
-
 		_printf("($) ");
+
 		read = getline(&line, &n, stdin);
 		if (read == -1)
 		{
@@ -29,61 +25,76 @@ int execute_shell(char **env)
 		}
 		if (line[0] == '#')
 		{
+			free(line);
 			line = NULL;
 			n = 0;
 			continue;
 		}
-
 		if (line[read - 1] == '\n')
 			line[read - 1] = '\0';
-
-		command = strtok(line, " ");
-		arguments[0] = command;
-
-		i = 1;
-		while ((arguments[i] = strtok(NULL, " ")) != NULL)
-			i++;
-
-		if (_strcmp(command, "exit") == 0)
+		arguments = tokenize_line(line);
+		if (arguments == NULL)
 		{
-			if (arguments[1] != NULL)
-				exit(_atoi(arguments[1]));
-			else
-				exit(0);
-		}
-		if (_strcmp(command, "env") == 0)
-		{
-			shell_env(env);
+			free(line);
+			line = NULL;
+			n = 0;
 			continue;
 		}
-		if (_strcmp(command, "echo") == 0 && _strcmp(arguments[1], "$$") == 0)
-		{
-			_printf("%d\n", getppid());
-			continue;
-		}
-		if (_strcmp(command, "echo") == 0 && _strcmp(arguments[1], "$?") == 0)
-		{
-			_printf("%d\n", last_exit_status);
-			continue;
-		}
-		if (_strcmp(command, "cd") == 0)
-		{
-			if (arguments[1] == NULL)
-			{
-				char *home_dir;
-
-				home_dir = getenv("HOME");
-				chdir(home_dir);
-			}
-			else
-				chdir(arguments[1]);
-
-			continue;
-		}
-		last_exit_status = execute_command(command, arguments, env);
-
+		execute_command(arguments[0], arguments, env);
+		free(arguments);
 		free(line);
 		line = NULL;
 		n = 0;
 	}
+
+	return (0);
+}
+
+
+/**
+ * shell_exit - exit the shell
+ * @arguments: the exit status to use, or NULL to use the default status
+ *
+ * Return: the exit status to use
+ */
+int shell_exit(char **arguments)
+{
+	if (arguments[1] != NULL)
+		exit(_atoi(arguments[1]));
+
+	exit(0);
+}
+
+/**
+ * shell_echo_ppid - print the parent process ID
+ *
+ * Return: Always 0.
+ */
+int shell_echo_ppid(void)
+{
+	_printf("%d\n", getppid());
+
+	return (0);
+}
+
+
+/**
+ * shell_cd - change the current working directory
+ * @arguments: the directory to change to,
+ * or NULL to change to the home directory
+ *
+ * Return: Always 0.
+ */
+int shell_cd(char **arguments)
+{
+	if (arguments[1] == NULL)
+	{
+		char *home = getenv("HOME");
+
+		chdir(home);
+	}
+	else
+		chdir(arguments[1]);
+
+	return (0);
 }

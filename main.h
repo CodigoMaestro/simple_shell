@@ -12,6 +12,7 @@
 #include <string.h>
 #include <sys/stat.h>
 
+#define MAX_SIZE 1024
 
 int _putchar(char c);
 int _printf(const char *format, ...);
@@ -24,10 +25,15 @@ int _strcmp(char *s1, char *s2);
 char *_strcat(char *dest, char *src);
 char *_strpbrk(char *str, char *find);
 char *_strtok(char *str, char *delim);
-int execute_shell(char **env);
 char *search_command_path(char *command);
 int _atoi(char *s);
-
+char **tokenize_line(char *line);
+int execute_command(char *command, char **arguments, char **env);
+int shell_cd(char **arguments);
+int shell_echo_last_exit_status(void);
+int shell_echo_ppid(void);
+int shell_exit(char **arguments);
+int execute_shell(char **env);
 /**
  * struct spec - Struct for format specifiers and their respective functions
  * @specifier: The format specifier
