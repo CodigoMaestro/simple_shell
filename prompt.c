@@ -10,7 +10,7 @@ void prompt_user(void)
 {
 	const char *prompt = "($) ";
 	ssize_t byte_written;
-      	int prompt_len = _strlen(prompt);
+	int prompt_len = _strlen(prompt);
 
 	if (isatty(STDIN_FILENO))
 		byte_written = write(STDIN_FILENO, prompt, prompt_len);
